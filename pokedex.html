@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="pokedex.css">
+    <script src="https://kit.fontawesome.com/d9eacc821b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="pokedex-container">
+        <div class="left-margin">
+            <div class="circle-white">
+                <div class="circle-blue">
+                    <div class="circle-led"></div>
+                </div>
+            </div>
+            <div class="led led-red">
+                <div class="luz-red"></div>
+            </div>
+            <div class="led led-yellow">
+                <div class="luz-yellow"></div>
+            </div>
+            <div class="led led-green">
+                <div class="luz-green"></div>
+            </div>
+            
+            <div class="pokedex-up"></div>
+            <div class="pokedex-up-right"></div>
+            <div class="pokedex-up-2"></div>
+            <div class="pokedex-up-right-2"></div>
+        </div>
+        <div class="screen">
+            <div class="screen-margin">
+                <div class="red-circle-1"></div>
+                <div class="red-circle-2"></div>
+                <div class="red-circle-3"></div>
+                <div class="container-black-line">
+                    <div class="black-line black-line-1"></div>
+                    <div class="black-line black-line-2"></div>
+                    <div class="black-line black-line-3"></div>
+                    <div class="black-line black-line-4"></div>
+                </div>
+                <div class="pokedex-screen">
+                    <img class="pokeimg" src="" alt="">
+                    <p class="poke-name"></p>
+                </div>
+            </div>
+        </div>
+        <div class="keyboard-down">
+            <button class="button-left" onclick="searchPokemon()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="led-red-bar"></div>
+            <div class="led-blue-bar"></div>
+            <div class="cruz-keyboard">
+                <div class="cruz-center"></div>
+                <button class="cruz cruz-button-up" onclick="buttonUp()"></button>
+                <button class="cruz cruz-button-right" onclick="nextPokemon()"></button>
+                <button class="cruz cruz-button-down" onclick="buttonDown()"></button>
+                <button class="cruz cruz-button-left" onclick="prevPokemon()"></button>
+            </div>
+            <div class="green-screen">
+                <p class="poke-id"></p>
+                <p class="poke-attack"></p>
+                <p class="poke-defense"></p>
+                <p class="poke-experiencie"></p>
+                <p class="poke-speed"></p>
+                <p class="poke-hp"></p>
+                <p class="poke-special-attack"></p>
+                <p class="poke-special-defense"></p>
+            </div>
+        </div>
+        <div class="center-bar">
+            <div class="center-bar-up"></div>
+            <div class="center-bar-midle"></div>
+            <div class="center-bar-down"></div>
+            <div class="center-bar-led"></div>
+        </div>
+        <div class="right-margin">
+            <div class="right-pokedex-up"></div>
+            <div class="right-pokedex-up-right"></div>
+            <div class="square-red"></div>
+            <div class="right-pokedex-up-2"></div>
+            <div class="right-pokedex-up-right-2"></div>
+            <div class="right-margin-container">
+                <div class="large-screen">
+                    <P class="poke-description"></P>
+                    <p class="pokemon-type"></p>
+                    <p>Habilidades</p>
+                    <div class="abilities-content"></div>
+                    <P>Movimientos Especiales o Ataques</P>
+                    <div class="special-moves"></div>
+                </div>
+                <div class="keyboard-number">
+                    <button class="number-button number-button-1" onclick="number1()">1</button>
+                    <button class="number-button number-button-2" onclick="number2()">2</button>
+                    <button class="number-button number-button-3" onclick="number3()">3</button>
+                    <button class="number-button number-button-4" onclick="number4()">4</button>
+                    <button class="number-button number-button-5" onclick="number5()">5</button>
+                    <button class="number-button number-button-6" onclick="number6()">6</button>
+                    <button class="number-button number-button-7" onclick="number7()">7</button>
+                    <button class="number-button number-button-8" onclick="number8()">8</button>
+                    <button class="number-button number-button-9" onclick="number9()">9</button>
+                    <button class="number-button number-button-0" onclick="number0()">0</button>
+                </div>
+                <div class="buttons-and-screens">
+                    <div class="bar-black bar-black-1"></div>
+                    <div class="bar-black bar-black-2"></div>
+                    <button class="select-button info-button" onclick="infoButton()"></button>
+                    <button class="select-button erase-button" onclick="eraseLetter()"><i class="fa-solid fa-delete-left"></i></button>
+                    <div class="yellow-led"></div>
+                    <div class="litte-screen litte-screen-1">
+                        <p>Buscar</p>
+                        <p class="number-pokemon-search">Pokemon Numero</p>
+                    </div>
+                    <div class="litte-screen litte-screen-2">
+                        <p class="pokemon-name-litte"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pokemon-info">
+        <h1 class="pokemon-title"></h1>
+        <div class="pokemon-data">
+            <img class="pokemon-image" src="" alt="">
+            <div>
+                <p></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="pokedex.js"></script>
+</html>
