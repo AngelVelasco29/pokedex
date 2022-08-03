@@ -658,3 +658,69 @@
 .pokemon-image{
     width: 300px;
 }
+
+.fa-xmark{
+    position: absolute;
+    color: red;
+    top: 20px;
+    right:20px;
+    font-size: 3rem;
+
+}
+
+.fa-xmark:hover{
+cursor: pointer;
+
+}
+
+.pokemon-info-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pokemon-description{
+    margin-bottom: 20px;
+}
+
+.pokemon-types{
+    margin-top: 10px;
+}
+.pokemon-types span{
+    margin: 0 20px ;
+    background-color: goldenrod;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+.pokemon-abilities div{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 10px;
+    align-items: center;
+}
+
+.pokemon-abilities span{
+    background-color: darkcyan;
+    width: 100px;
+    padding: 5px 10px;
+    margin-right: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+.pokemon-moves div{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 10px;
+    align-items: center;
+}
+
+.pokemon-moves span{
+    background-color: darkcyan;
+    width: 100px;
+    padding: 5px 10px;
+    margin-right: 20px;
+    border-radius: 10px;
+    color: white;
+}
