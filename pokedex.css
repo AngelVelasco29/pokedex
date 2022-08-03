@@ -656,7 +656,9 @@
 }
 
 .pokemon-image{
-    width: 300px;
+    width: 30vw;
+    min-width: 150px;
+    max-width: 300px;
 }
 
 .fa-xmark{
@@ -693,6 +695,10 @@ cursor: pointer;
     border-radius: 20px;
 }
 
+.pokemon-info h2{
+    text-align: center;
+}
+
 .pokemon-abilities div{
     display: flex;
     margin-top: 10px;
@@ -723,4 +729,20 @@ cursor: pointer;
     margin-right: 20px;
     border-radius: 10px;
     color: white;
+}
+
+@media (max-width:600px) {
+    .pokemon-data{
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 20px;
+        margin-bottom: 20px;
+    }
+
+    .pokemon-image{
+        margin-bottom: 20px;
+    }
+    .fa-xmark{
+        font-size: 1.5rem;
+    }
 }
