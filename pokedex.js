@@ -46,7 +46,6 @@ const fetchData = (API) => {
 }
 
 const saveLocalStorage = (pokemon) => {
-    console.log(pokemon);
     localStorage.setItem(pokemon.id, JSON.stringify(pokemon));
 }
 
@@ -290,7 +289,6 @@ const cloceData= ()=>{
 const infoButton = () => {
     pokedex.style = "display:none";
     pokeInfo.style= "display:block"
-    console.log(pokemonData);
     pokeInfoH1.textContent = pokemonData.name;
     pokeInfoImage.src = pokemonData.image;
     pokeInfoDescription.textContent = pokemonData.description;
