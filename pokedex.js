@@ -18,8 +18,6 @@ const numberSearch = document.querySelector(".number-pokemon-search");
 const pokeLittleName = document.querySelector(".pokemon-name-litte");
 const pokedex = document.querySelector(".pokedex-container");
 
-
-
 const BASE_API = "https://pokeapi.co/api/v2/";
 const pokemon_API = `${BASE_API}pokemon/`;
 const species_API = `${BASE_API}pokemon-species/`;
@@ -31,170 +29,179 @@ let pokemonData = {
     moves: [],
 };
 let pokemon = 1;
-let currentPokemon;
-let descriptionPokemon;
 let pokeNames;
 let searchNumber = '';
 let pokemonType = "";
 let pokeMove;
 let pokeMoveDescription;
+let abilitiesPokemon=[];
+let abilitiesDescription=[];
+let pokemonMoves=[]
+let MovesDescription=[]
 
-const fetchData = (API) => {
-    return fetch(API)
-        .then((res) => res.json())
-        .then((data) => data)
+const fetchData = async(urlApi) => {
+    const response= await fetch(urlApi)
+    const data = await response.json()
+    return data;
 }
 
 const saveLocalStorage = (pokemon) => {
+    console.log(pokemon);
     localStorage.setItem(pokemon.id, JSON.stringify(pokemon));
 }
 
-const printPokemon = (numberPokemon) => {
-    pokemonData = {
-        abilities: [],
-        type: [],
-        moves: [],
-    };
-    setTimeout(() => {
-        saveLocalStorage(pokemonData);
-    }, 500)
-
-    fetchData(`${pokemon_API}${numberPokemon}`).then(data => {
-        currentPokemon = data;
-        if (data.sprites.other.dream_world.front_default) {
-            pokemonData.image = data.sprites.other.dream_world.front_default
-        } else {
-            pokemonData.image = data.sprites.other.home.front_default;
-        }
-        pokeImg.src = pokemonData.image;
-
-        pokemonData.id = data.id;
-        pokeID.textContent = "ID: " + pokemonData.id;
-
-        pokemonData.attack = data.stats[1].base_stat;
-        pokeAttack.textContent = "ATK: " + pokemonData.attack;
-
-        pokemonData.defense = data.stats[2].base_stat;
-        pokeDefense.textContent = "DEF: " + pokemonData.defense;
-
-        pokemonData.experience = data.base_experience;
-        pokeExperience.textContent = "EXP: " + pokemonData.experience;
-
-        pokemonData.speed = data.stats[5].base_stat;
-        pokeSpeed.textContent = "SPE: " + pokemonData.speed;
-
-        pokemonData.hp = data.stats[0].base_stat;
-        pokeHP.textContent = "HP: " + pokemonData.hp;
-
-        pokemonData.specialAttack = data.stats[3].base_stat;
-        pokeSpecialAttack.textContent = "SATK: " + pokemonData.specialAttack;
-
-        pokemonData.specialDefense = data.stats[4].base_stat;
-        pokeSpecialDefense.textContent = "SDEF: " + pokemonData.specialDefense;
+const pokemonJson = async(numberPokemon) => {
+    try{
+        const pokemon= await fetchData(`${pokemon_API}${numberPokemon}`);
+        const formsUrl= await fetchData(pokemon.forms[0].url);
+        const species= await fetchData(`${species_API}${numberPokemon}`)
 
         abilitiesContent.innerHTML = "";
         specialMoves.innerHTML = "";
         largeScreen.scrollTop = 0;
-
-
-
-        data.abilities.map(ability => fetchData(ability.ability.url).then(data => {
-            const parrafo = document.createElement("p");
-            abilitiesContent.appendChild(parrafo);
-            data.names.find(language => {
-                if (language.language.name == "es") {
-                    data.flavor_text_entries.find(description => {
-                        if (description.language.name == "es") {
-                            return pokemonData = { ...pokemonData, abilities: [...pokemonData.abilities, { name: language.name, description: description.flavor_text }] };
-                        }
-                    })
-                    return language.name;
-                }
-            });
-
-            pokemonData.abilities.map(ability => {
-                parrafo.textContent = ability.name + ": " + ability.description;
-            })
-        }));
-
-
         pokemonType = "";
-        fetchData(data.forms[0].url).then(data => {
-            data.types.map(type => {
-                fetchData(type.type.url).then(data => {
-                    data.names.find(language => {
-                        if (language.language.name == "es") {
-                            pokemonData = { ...pokemonData, type: [...pokemonData.type, { name: language.name }] };
-                            pokemonType += language.name + "  |   ";
-                            return pokeType.textContent = "Tipo: " + pokemonType;
-                        }
-                    })
-                })
+
+        if (pokemon.sprites.other.dream_world.front_default) {
+            pokemonData.image = pokemon.sprites.other.dream_world.front_default
+        } else {
+            pokemonData.image = pokemon.sprites.other.home.front_default;
+        }
+        pokemonData.id = pokemon.id;
+        pokemonData.name = species.names[6].name;
+        pokemonData.attack = pokemon.stats[1].base_stat;
+        pokemonData.defense = pokemon.stats[2].base_stat;
+        pokemonData.experience = pokemon.base_experience;
+        pokemonData.speed = pokemon.stats[5].base_stat;
+        pokemonData.hp = pokemon.stats[0].base_stat;
+        pokemonData.specialAttack = pokemon.stats[3].base_stat;
+        pokemonData.specialDefense = pokemon.stats[4].base_stat;
+
+        const abilityUrl= await Promise.all(
+            pokemon.abilities.map((ability)=>{
+                return fetchData(ability.ability.url);;
+            })
+        );
+
+        const abilityName= abilityUrl.map((ability)=>{
+                return ability.names
+        });
+
+        abilityName.forEach(language=>{
+            language.find(idioma=>{
+                if(idioma.language.name=="es"){
+                    return abilitiesPokemon.push(idioma.name);
+                  }
             })
         })
 
-
-        data.moves.map(move => {
-            fetchData(move.move.url).then(data => {
-                const parrafo = document.createElement("p");
-                specialMoves.appendChild(parrafo);
-                data.names.find(language => {
-                    if (language.language.name == "es") {
-                        data.flavor_text_entries.find(description => {
-                            if (description.language.name == "es") {
-                                pokemonData = { ...pokemonData, moves: [...pokemonData.moves, { name: language.name, description: description.flavor_text }] };
-                                return pokeMoveDescription = description.flavor_text;
-                            }
-                        })
-                        return pokeMove = language.name;
-                    }
-                })
-
-                parrafo.textContent = `${pokeMove}: ${pokeMoveDescription}`;
-
+        abilityUrl.forEach(description=>{
+            description.flavor_text_entries.find(item=>{
+                if(item.language.name=="es"){
+                    return abilitiesDescription.push(item.flavor_text);
+                }
             })
         })
-        return pokemonData;
 
+        abilitiesPokemon.forEach((ability, index)=>{
+            pokemonData.abilities.push( {name: ability, description: abilitiesDescription[index] });
+        })
 
-    })
+        const TypesPokemon= await Promise.all(
+            formsUrl.types.map((type)=>{
+                return fetchData(type.type.url);
+            })
+        );
 
-}
+        TypesPokemon.forEach(language=>{
+            language.names.find(item=>{
+                if(item.language.name=="es"){
+                    return pokemonData.type.push(item.name)
+                }
+            })
+        })
+        
+        const movesPokemon= await Promise.all(
+            pokemon.moves.map(move=>{
+                return fetchData(move.move.url);
+            })
+        );
 
-const speciesPokemon = (numberPokemon) => {
-    fetchData(`${species_API}${numberPokemon}`).then(data => {
-        descriptionPokemon = data;
-        pokemonData.name = data.names[6].name;
-        pokeName.textContent = data.names[6].name;
-        data.flavor_text_entries.find(description => {
+        movesPokemon.forEach(language=>{
+            language.names.find(idioma=>{
+                if(idioma.language.name=="es"){
+                    return pokemonMoves.push(idioma.name);
+                  }
+            })
+            language.flavor_text_entries.find(item=>{
+                if(item.language.name=="es"){
+                    return MovesDescription.push(item.flavor_text);
+                }
+            })
+        })
+
+        pokemonMoves.map((item,index)=>{
+            pokemonData.moves.push({ name: item, description: MovesDescription[index] });
+        })
+
+        species.flavor_text_entries.find(description => {
             if (description.language.name == "es") {
-                pokemonData.description = description.flavor_text;
-                return pokeDescription.textContent = pokemonData.description;
+                return pokemonData.description = description.flavor_text;
             }
         })
+
+        pokedexPrint();
+        saveLocalStorage(pokemonData);
+    }catch (error){
+        console.log(error);
+    }
+}
+
+const pokedexPrint= ()=>{
+    pokeImg.src = pokemonData.image;
+    pokeID.textContent = "ID: " + pokemonData.id;
+    pokeName.textContent = pokemonData.name;
+    pokeDescription.textContent =pokemonData.description;
+    pokeAttack.textContent = "ATK: " + pokemonData.attack;
+    pokeDefense.textContent = "DEF: " + pokemonData.defense;
+    pokeExperience.textContent = "EXP: " + pokemonData.experience;
+    pokeSpeed.textContent = "SPE: " + pokemonData.speed;
+    pokeHP.textContent = "HP: " + pokemonData.hp;
+    pokeSpecialAttack.textContent = "SATK: " + pokemonData.specialAttack;
+    pokeSpecialDefense.textContent = "SDEF: " + pokemonData.specialDefense;
+
+    pokemonData.abilities.forEach(ability=>{
+        const parrafo = document.createElement("p");
+        abilitiesContent.appendChild(parrafo);
+        parrafo.textContent = ability.name + ": " + ability.description;
+    })
+
+    pokemonData.type.forEach(type=>{
+        pokemonType += type + "  |   ";
+    })
+    pokeType.textContent = "Tipo: " + pokemonType;
+
+    pokemonData.moves.forEach(move=>{
+        const parrafo = document.createElement("p");
+        specialMoves.appendChild(parrafo);
+        parrafo.textContent = `${move.name}: ${move.description}`;
     })
 }
 
-const namesPokemon = () => {
-    fetchData(pokemonNames_API).then(data => {
-        pokeNames = data;
-    })
-}
+const namesPokemon = (async() => {
+    pokeNames= await fetchData(pokemonNames_API)
+})();
 
-printPokemon(pokemon);
-speciesPokemon(pokemon);
-namesPokemon();
+
+pokemonJson(pokemon);
 const nextPokemon = () => {
     pokemon += 1;
-    printPokemon(pokemon);
-    speciesPokemon(pokemon);
+    pokemonJson(pokemon);
 }
 
 const prevPokemon = () => {
     if (pokemon > 1) {
         pokemon -= 1;
-        printPokemon(pokemon);
-        speciesPokemon(pokemon);
+        pokemonJson(pokemon);
     }
 }
 
@@ -207,45 +214,15 @@ const buttonDown = () => {
 }
 
 const searchPokemon = () => {
-    printPokemon(searchNumber);
-    speciesPokemon(searchNumber);
+    pokemonJson(searchNumber);
     pokemon = parseInt(searchNumber);
     numberSearch.textContent = "Buscar Pokemon";
     searchNumber = '';
     pokeLittleName.textContent = "";
 }
 
-const number1 = () => {
-    checkNumber('1');
-}
-
-const number2 = () => {
-    checkNumber('2');
-}
-
-const number3 = () => {
-    checkNumber('3');
-}
-const number4 = () => {
-    checkNumber('4');
-}
-const number5 = () => {
-    checkNumber('5');
-}
-const number6 = () => {
-    checkNumber('6');
-}
-const number7 = () => {
-    checkNumber('7');
-}
-const number8 = () => {
-    checkNumber('8');
-}
-const number9 = () => {
-    checkNumber('9');
-}
-const number0 = () => {
-    checkNumber('0');
+const number = (x) => {
+    checkNumber(x);
 }
 
 const checkNumber = (number) => {
@@ -292,9 +269,10 @@ const infoButton = () => {
     pokeInfoH1.textContent = pokemonData.name;
     pokeInfoImage.src = pokemonData.image;
     pokeInfoDescription.textContent = pokemonData.description;
+    console.log(pokemonData)
     pokemonData.type.map(type=>{
         const span = document.createElement("span");
-        span.textContent=type.name;
+        span.textContent=type;
         pokeInfoTypes.appendChild(span);
     })
     pokemonData.abilities.map(ability=>{
